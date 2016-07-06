@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.sshd.common.file.FileSystemFactory;
 import org.apache.sshd.common.session.Session;
 
-import ftp.v3.My3FileSystemProvider;
+import ftp.v4.My4FileSystemProvider;
 
 public class MyFileSystemFactory implements FileSystemFactory
 {
@@ -35,6 +35,6 @@ public class MyFileSystemFactory implements FileSystemFactory
     envMap.put(UserInfo.NAME, SessionAttributeUtils.getUserInfo(session));//Login info is set after authentication.
 
 //    return new My3FileSystemProvider().newFileSystem(URI.create("aws://foo/bar"), Collections.<String, Object>emptyMap());
-    return new My3FileSystemProvider().newFileSystem((URI)null, envMap);
+    return new My4FileSystemProvider().newFileSystem((URI)null, envMap);
   }
 }
