@@ -28,11 +28,11 @@ import java.util.WeakHashMap;
 
 import ftp.MyFileAttributes;
 import ftp.MyFileResource;
-import ftp.UserInfo;
 
 public class My4FileSystemProvider extends FileSystemProvider
 {
   private final Map<URI, My4FileSystem> fileSystems = Collections.synchronizedMap(new WeakHashMap<URI, My4FileSystem>());
+  private Long accountId;
 
   @Override
   public String getScheme()
@@ -53,10 +53,10 @@ public class My4FileSystemProvider extends FileSystemProvider
       throw new FileSystemAlreadyExistsException();
     }
 
-    UserInfo userInfo = (UserInfo)env.get(UserInfo.NAME);
-    System.out.println("My4FileSystemProvider newFileSystem(); UserInfo=" + userInfo);
+    accountId = (Long)env.get("accountId");
+    System.out.println("My4FileSystemProvider newFileSystem(); accountId=" + accountId);
 
-    My4FileSystem fileSystem = new My4FileSystem(this, userInfo);
+    My4FileSystem fileSystem = new My4FileSystem(this);
     fileSystems.put(uri, fileSystem);
     return fileSystem;
   }
@@ -94,11 +94,8 @@ public class My4FileSystemProvider extends FileSystemProvider
   @Override
   public DirectoryStream<Path> newDirectoryStream(Path dir, Filter<? super Path> filter) throws IOException
   {
-    // TODO Auto-generated method stub
     System.out.println("My4FileSystemProvider newDirectoryStream(); dir=" + dir + " ; dir instanceof My4Path?" + (dir instanceof My4Path) + " ; filter=" + filter);
-    My4Path my4Path = (My4Path)dir;
-    System.out.println("My4FileSystemProvider newDirectoryStream(); UserInfo=" + my4Path.getUserInfo());
-    return new My4DirectoryStream(dir);
+    return new My4DirectoryStream(this.accountId, dir);
   }
 
   @Override
@@ -217,15 +214,15 @@ public class My4FileSystemProvider extends FileSystemProvider
     map.put("isDirectory", fileAttributes.isDirectory());
     map.put("isRegularFile", fileAttributes.isRegularFile());
     map.put("permissions", fileAttributes.permissions());
+    map.put("owner", fileAttributes.owner());
+    map.put("group", fileAttributes.group());
     return map;
-//    return null;
   }
 
   @Override
   public void setAttribute(Path path, String attribute, Object value, LinkOption... options) throws IOException
   {
-    // TODO Auto-generated method stub
-    System.out.println("My4FileSystemProvider setAttribute()");
+    System.out.println("My4FileSystemProvider setAttribute(); path=" + path + "; attribute=" + attribute + "; value=" + value);
   }
 
   @Override
@@ -237,7 +234,7 @@ public class My4FileSystemProvider extends FileSystemProvider
       System.out.println("My4FileSystemProvider newFileChannel(); attr=" + attr);
     }
 
-    return MyFileResource.INSTANCE.newFileChannel(path);
+    return MyFileResource.INSTANCE.newFileChannel(path, options);
 //    My4Path my4Path = (My4Path)path;
 //    if(my4Path.getFileAttributes() == null)//模擬新建檔案後，給個假的檔案屬性。
 //    {
