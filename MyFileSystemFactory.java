@@ -32,7 +32,7 @@ public class MyFileSystemFactory implements FileSystemFactory
     System.out.println("MyFileSystemFactory session.getSessionId() = " + new String(session.getSessionId()));
 
     Map<String, Object> envMap = new HashMap<>();
-    envMap.put(UserInfo.NAME, SessionAttributeUtils.getUserInfo(session));//Login info is set after authentication.
+    envMap.put("accountId", SessionAttributeUtils.getAccountId(session));//Login info is set after authentication.
 
 //    return new My3FileSystemProvider().newFileSystem(URI.create("aws://foo/bar"), Collections.<String, Object>emptyMap());
     return new My4FileSystemProvider().newFileSystem((URI)null, envMap);

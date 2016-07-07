@@ -24,10 +24,11 @@ public class MyPasswordAuthenticator implements PasswordAuthenticator
 
     try
     {
-      if(!"anderson.lin@asuscloud.com".equals(username))
+      if(!"anderson.lin@asuscloud.com".equals(username) && !"raymond.wu@asuscloud.com".equals(username))
       {
-        session.disconnect(SshConstants.SSH2_DISCONNECT_ILLEGAL_USER_NAME, "You're not Anderson.");
+        session.disconnect(SshConstants.SSH2_DISCONNECT_ILLEGAL_USER_NAME, "You're not Anderson or Raymond.");
       }
+
       if(session.getActiveSessionCountForUser(username) >= 2)
       {
         session.disconnect(SshConstants.SSH2_DISCONNECT_TOO_MANY_CONNECTIONS, "連線太多嚕");
@@ -39,8 +40,7 @@ public class MyPasswordAuthenticator implements PasswordAuthenticator
     }
     //Got user info = authenticated
     Long accountId = fakeAccountId.getAndIncrement();
-    UserInfo userInfo = new UserInfo(accountId, username);
-    SessionAttributeUtils.setUserInfo(session, userInfo);
+    SessionAttributeUtils.setAccountId(session, accountId);
 
     return true;
   }

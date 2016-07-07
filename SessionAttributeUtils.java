@@ -5,15 +5,15 @@ import org.apache.sshd.common.session.Session;
 
 public class SessionAttributeUtils
 {
-  private static final AttributeKey<UserInfo> USER_INFO_KEY = new AttributeKey<>();
+  private static final AttributeKey<Long> KEY_ACCOUNT_ID = new AttributeKey<>();
 
-  public static UserInfo getUserInfo(Session session)
+  public static Long getAccountId(Session session)
   {
-    return session.getAttribute(USER_INFO_KEY);
+    return session.getAttribute(KEY_ACCOUNT_ID);
   }
 
-  public static void setUserInfo(Session session, UserInfo loginInfo)
+  public static void setAccountId(Session session, long accountId)
   {
-    session.setAttribute(USER_INFO_KEY, loginInfo);
+    session.setAttribute(KEY_ACCOUNT_ID, accountId);
   }
 }

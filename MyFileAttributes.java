@@ -9,12 +9,14 @@ import java.util.Set;
 
 public class MyFileAttributes implements PosixFileAttributes
 {
+  private final static MyUserPrincipal HIDDEN_USER_PRINCIPAL = new MyUserPrincipal("HIDDEN_OWNER");
+  private final static MyGroupPrincipal HIDDEN_GROUP_PRINCIPAL = new MyGroupPrincipal("HIDDEN_GROUP");
   private final FileTime lastModifiedTime;
   private final FileTime lastAccessTime;
   private final FileTime creationTime;
   private final boolean isRegularFile;
   private final boolean isDirectory;
-  private final long size;
+  private long size;
   private final Set<PosixFilePermission> permissions;
 
 
@@ -66,6 +68,11 @@ public class MyFileAttributes implements PosixFileAttributes
     return size;
   }
 
+  public void setSize(long newSize)
+  {
+    this.size = newSize;
+  }
+
   @Override
   public Set<PosixFilePermission> permissions()
   {
@@ -96,22 +103,20 @@ public class MyFileAttributes implements PosixFileAttributes
   @Override
   public UserPrincipal owner()
   {
-    // TODO Auto-generated method stub
-    return null;
+    return HIDDEN_USER_PRINCIPAL;
   }
 
   @Override
   public GroupPrincipal group()
   {
-    // TODO Auto-generated method stub
-    return null;
+    return HIDDEN_GROUP_PRINCIPAL;
   }
 
   @Override
   public String toString()
   {
     StringBuilder builder = new StringBuilder();
-    builder.append("My3FileAttributes [lastModifiedTime=")
+    builder.append("MyFileAttributes [lastModifiedTime=")
            .append(lastModifiedTime)
            .append(", lastAccessTime=")
            .append(lastAccessTime)
